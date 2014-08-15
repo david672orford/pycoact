@@ -1,0 +1,31 @@
+== Sample Local Store ==
+    <shared_table>
+        <repository>
+            <url>http://localhost:8080/request.cgi/testtable</url>
+            <realm>test</realm>
+            <username>testuser</username>
+            <password>testpass</password>
+            <pulled_version>0</pulled_version>
+        </repository>
+        <conflict_rows>
+        </conflict_rows>
+        <rows>
+        </rows>
+        <new_rows>
+        </new_rows>
+    </shared_table>
+
+== Sample Pull Request == 
+    <request>
+        <type>pull</type>
+        <pulled_version>-1</pulled_version>
+    </request>
+ 
+== Sample Push Request == 
+    <request>
+        <type>push</type>
+        <row id='1' version='4'>test three</row>
+        <row id='2' version='1'>test three</row>
+        <row version='1'>new row</row>
+    </request>
+

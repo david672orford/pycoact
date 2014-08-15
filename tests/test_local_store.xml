@@ -1,0 +1,15 @@
+<shared_table>
+<repository>
+<url>http://localhost:8080/request.cgi/testtable</url>
+<realm>test</realm>
+<username>testuser</username>
+<password>testpass</password>
+<pulled_version>0</pulled_version>
+</repository>
+<conflict_rows>
+</conflict_rows>
+<rows>
+</rows>
+<new_rows>
+</new_rows>
+</shared_table>
