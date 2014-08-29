@@ -1,6 +1,6 @@
 # pycoact/client/table.py
-# Copyright 2013, Trinity College Computing Center
-# Last modified: 22 August 2013
+# Copyright 2013, 2014, Trinity College Computing Center
+# Last modified: 23 August 2014
 
 import xml.etree.cElementTree as ET
 import urllib2
@@ -133,9 +133,18 @@ class SharedTable:
 	#====================================================
 	def save(self):
 		self.debug(1, "SharedTable.save(): save to \"%s\"..." % self.local_filename)
+
+		# MS-DOS naming scheme
 		(base, ext) = os.path.splitext(self.local_filename)
 		temp = "%s.tmp" % base
 		backup = "%s.bak" % base
+		if os.path.exists(backup):		# remove
+			os.remove(backup)
+
+		# Unix naming scheme
+		temp = "%s.tmp" % self.local_filename
+		backup = "%s~" % self.local_filename
+
 		self.xml.write(temp, encoding='utf-8')
 		if os.path.exists(self.local_filename):
 			if os.path.exists(backup):

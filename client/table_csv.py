@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # pycoact/client/table.py
-# Copyright 2013, Trinity College Computing Center
-# Last modified: 22 August 2013
+# Copyright 2013, 2014, Trinity College Computing Center
+# Last modified: 23 August 2014
 
 import xml.etree.cElementTree as ET
 import pyapp.csv_unicode as csv
@@ -203,32 +203,30 @@ class SharedTableCSV(SharedTable):
 #=============================================================================
 if __name__ == "__main__":
 	import sys
+	util(sys.argv[0], sys.argv[1:], 1)
+
+def util(progname, args):
 	import codecs
 
-	def create_client():
-		if len(sys.argv) < 3:
-			sys.stderr.write("Please supply the name of the STB file.\n")
-			sys.exit(1)
-		client = SharedTableCSV(sys.argv[2])
+	if len(args) < 3:
+		print "Usage: %s import <filename.stb> <filename.csv>" % progname
+		print "       (Adds rows from CSV file)"
+		print "       %s export <filename.stb> <filename.csv>" % progname
+		print "       (Writes all rows to CSV file)"
+		print "       %s update <filename.stb> <filename.csv>" % progname
+		print "       (Loads replacement rows from CSV file)"
+		return 0
+
+	subcommand, stb_filename, csv_filename = args
+	if subcommand == "import":
+		client = SharedTableCSV(stb_filename)
 		#client.debug_level = 1
-		return client
 
-	if len(sys.argv) < 2:
-		print "Usage: %s import <filename.stb> <filename.csv>"
-		print "       %s export <filename.stb> <filename.csv>"
-		sys.exit(0)
-
-	if sys.argv[1] == "import":
-		client = create_client()
-
-		if len(sys.argv) < 4:
-			sys.stderr.write("Please supply the name of the CSV file.\n")
-			sys.exit(1)
+		reader = csv.reader(codecs.open(csv_filename, "rb", "utf-8"))
 
 		# We can't call csv_writer() until we have called this.
 		client.csv_reader()
 	
-		reader = csv.reader(codecs.open(sys.argv[3], "rb", "utf-8"))
 		writer = client.csv_writer()
 
 		for row in reader:
@@ -236,37 +234,39 @@ if __name__ == "__main__":
 	
 		#client.push()
 		client.save()
+		return 0
 
-	elif sys.argv[1] == "export":
-		client = create_client()
+	elif subcommand == "export":
+		client = SharedTableCSV(stb_filename)
+		#client.debug_level = 1
 
-		if len(sys.argv) < 4:
-			sys.stderr.write("Please supply the name of the CSV file.\n")
-			sys.exit(1)
+		writer = csv.writer(codecs.open(csv_filename, "wb", "utf-8"))
 
 		reader = client.csv_reader()
-		writer = csv.writer(codecs.open(sys.argv[3], "wb", "utf-8"))
-
 		for row in reader:
 			writer.writerow(row)
 
-	elif sys.argv[1] == "update":
-		client = create_client()
+		return 0
 
-		if len(sys.argv) < 4:
-			sys.stderr.write("Please supply the name of the CSV file.\n")
-			sys.exit(1)
+	elif subcommand == "update":
+		client = SharedTableCSV(stb_filename)
+		#client.debug_level = 1
 
-		reader = client.csv_reader()
+		reader = csv.reader(codecs.open(csv_filename, "rb", "utf-8"))
+
+		dummy_reader = client.csv_reader()
+		for row in dummy_reader:
+			pass
 
 		writer = client.csv_writer()
-		file_reader = csv.reader(codecs.open(sys.argv[3], "rb", "utf-8"))
-		for row in file_reader:
+		for row in reader:
 			writer.writerow(row)
 
 		client.save()
+		return 0
 
 	else:
-		sys.stderr.write("Unrecognized subcommand: %s\n" % sys.argv[1])
+		sys.stderr.write("Unrecognized subcommand: %s\n" % subcommand)
+		return 255
 
 # end of file
