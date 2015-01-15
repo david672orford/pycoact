@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # pycoact/client/table.py
-# Copyright 2013, 2014, Trinity College Computing Center
-# Last modified: 23 August 2014
+# Copyright 2013, 2014, 2015, Trinity College Computing Center
+# Last modified: 2 January 2015
 
 import xml.etree.cElementTree as ET
 import pyapp.csv_unicode as csv
@@ -210,11 +210,11 @@ def util(progname, args):
 
 	if len(args) < 3:
 		print "Usage: %s import <filename.stb> <filename.csv>" % progname
-		print "       (Adds rows from CSV file)"
+		print "         (Adds rows from CSV file)"
 		print "       %s export <filename.stb> <filename.csv>" % progname
-		print "       (Writes all rows to CSV file)"
+		print "         (Writes all rows to CSV file)"
 		print "       %s update <filename.stb> <filename.csv>" % progname
-		print "       (Loads replacement rows from CSV file)"
+		print "         (Loads replacement rows from CSV file)"
 		return 0
 
 	subcommand, stb_filename, csv_filename = args
