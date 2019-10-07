@@ -1,7 +1,7 @@
-#
+#! /usr/bin/python
 # pycoact/server/table.py
-# Copyright 2013, Trinity College Computing Center
-# Last modified: 22 August 2013
+# Copyright 2013, 2014, 2015, Trinity College Computing Center
+# Last modified: 15 February 2015
 #
 
 import sqlite3
@@ -62,10 +62,7 @@ class SharedTableServer:
 		self.debug(1, "Pull after version %d" % pulled_version)
 
 		cursor = self.conn.cursor()
-		if self.tabletype == "stb":
-			cursor.execute("select * from %s where tver > ? or id = 0 order by id" % self.tablename, [pulled_version])
-		else:
-			cursor.execute("select * from %s where tver > ? or id = 0 order by id" % self.tablename, [pulled_version])
+		cursor.execute("select * from %s where tver > ? or id = 0 order by id" % self.tablename, [pulled_version])
 
 		# Create <response>
 		top = ET.Element('response')
@@ -228,6 +225,9 @@ class SharedTableServer:
 
 if __name__ == "__main__":
 	import sys
+	if len(sys.argv) != 4:
+		sys.stderr.write("Usage: %s: <filename> <tablename> <tabletype>\n")
+		sys.exit(1)
 	repo = SharedTableServer(sys.argv[1], sys.argv[2], sys.argv[3])
 	repo.create()
 

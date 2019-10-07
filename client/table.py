@@ -1,6 +1,6 @@
 # pycoact/client/table.py
-# Copyright 2013, 2014, Trinity College Computing Center
-# Last modified: 23 August 2014
+# Copyright 2013--2017, Trinity College Computing Center
+# Last modified: 18 January 2017
 
 import xml.etree.cElementTree as ET
 import urllib2
@@ -204,7 +204,7 @@ class SharedTable:
 				#count_conflicts += 1	# do this below only if also a change
 				existing = conflict_rows_by_id[id]
 				if version != existing.get('version'):			# If there were furthur changes,
-					existing['version'] = version				# accept them.
+					existing.attrib['version'] = version		# accept them.
 					existing.text = row.text
 					count_changes += 1
 					count_conflicts += 1
